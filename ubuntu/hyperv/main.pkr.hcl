@@ -7,50 +7,19 @@ packer {
   }
 }
 
-locals {
-  vm_ip = "null"
-}
-######################################
-# 1) PRE-BUILD STEP: render template #
-######################################
-#build {
-#  name = "prepare_http"
-#  sources = [
-#    
-#  ]
-#  provisioner "shell-local" {#
-#    inline = [
-#      "echo '${replace(templatefile("../http/user-data.tmpl", { "ssh_pubkey" = var.ssh_pubkey }))}' > ../http/user-data"
-#    ]
-#  }
-#}
-#source "null" "get-ip" {
-#  communicator = "none"
-#}
-#build {
-#  name = "prepare_host"
-#  sources = ["sources.null.get-ip"]
-#  provisioner "shell-local" {
-#    inline = [
-#      vm_ip = trimspace("Get-VMNetworkAdapter -VMName <name> | select -ExpandProperty IPAddresses | Select -First 1"),
-#    ]
-#  }
-#}
-
 ###########################
 # 2) VM BUILD (HYPER-V)   #
 ###########################
 source "hyperv-iso" "ubuntu" {
   iso_url             = "https://releases.ubuntu.com/24.04/ubuntu-24.04.3-live-server-amd64.iso"
-  iso_checksum        = "none"#"https://dl-cdn.alpinelinux.org/alpine/v3.22/releases/x86_64/alpine-standard-3.22.2-x86_64.iso.sha256"
+  iso_checksum        = "sha256:c3514bf0056180d09376462a7a1b4f213c1d6e8ea67fae5c25099c6fd3d8274b"
   generation          = 2
 
   communicator        = "ssh"
 
   mac_address = var.mac
-  ssh_username        = "qelb"
-  ssh_password = "root"
-  ssh_private_key_file = var.ssh_privkey_path
+  ssh_username        = var.username
+  ssh_password = var.password
   ssh_timeout       = "45m"
   guest_additions_mode = "disable"
   enable_secure_boot = false

@@ -1,8 +1,3 @@
-variable "iso_dir" {
-  type        = string
-  description = "Path to ISO directory"
-}
-
 variable "vhd_dir" {
   type        = string
   description = "Directory for storing VHDXs"
@@ -11,7 +6,7 @@ variable "vhd_dir" {
 variable "hyperv_switch" {
   type        = string
   description = "Virtual switch"
-  default     = "Default Switch"
+  default     = "Default Switch" # Switch must be External, I think. 
 }
 
 variable "output_vhd_name" {
@@ -20,36 +15,24 @@ variable "output_vhd_name" {
   default     = "universal.vhdx"
 }
 
-variable "role" {
+variable "username" {
   type        = string
-  default     = "worker"
+  default     = "root"
+}
+
+variable "username" {
+  type        = string
+  default     = "123admin!@#"
 }
 
 variable "hostname" {
   type        = string
-  default     = "nixos-golden"
+  default     = "ubuntu-golden"
 }
 
 variable "mac" {
   type        = string
   default     = "00:15:5D:81:01:01"
-}
-
-variable "ssh_pubkey" {
-  type        = string
-  description = "Public SSH key"
-  default     = "keys/id_ed25519.pub"
-}
-
-variable "ssh_privkey_path" {
-  type        = string
-  description = "Relative path to private SSH key (inside packer dir), e.g. keys/id_ed25519"
-  default     = "keys/id_ed25519"
-}
-
-variable "new_root_pass" {
-  type        = string
-  description = "New root user password after installation"
 }
 
 variable "packer_cpus" {
