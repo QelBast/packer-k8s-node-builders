@@ -1,0 +1,44 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: en_US
+  keyboard:
+    layout: us
+
+  identity:
+    hostname: ubuntu-golden
+    username: qelb
+    password: "$6$tk50IDQXH/ejgAnu$FELg9raEiGSheIuN/OWPm7nyfmiUtTWbg5NCIlYHNsaYT1ILb7CzbbaycjUdnOWNLkhrDNmSrGid23.fAkX/U/"
+
+  ssh:
+    allow-pw: true
+    install-server: true
+
+  storage:
+    layout:
+      name: lvm
+
+  packages:
+    - linux-cloud-tools-common
+    - linux-cloud-tools-generic
+    - qemu-guest-agent
+    - cloud-init
+    - curl
+    - bash-completion
+
+  user-data:
+    disable_root: true
+    users:
+    - default
+    - name: qelb
+      groups: [sudo]
+      shell: /bin/bash
+      lock_passwd: false
+      sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+      ssh_authorized_keys:
+        - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMJfsebw/+5G2IbOVMQQ2it5NtmStSRuRfoE/Umd5U/r kllyk@QelB"
+
+  late-commands:
+    - curtin in-target --target=/target systemctl enable hv-kvp-daemon.service
+    - curtin in-target --target=/target systemctl start hv-kvp-daemon.service
+    - curtin in-target --target=/target systemctl enable qemu-guest-agent
